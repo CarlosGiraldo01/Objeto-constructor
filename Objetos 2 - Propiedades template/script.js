@@ -5,10 +5,21 @@ this.marca = marca;
 this.modelo = modelo;
 this.anio = anio;
 this.color = color;
-this.cantidad = cantidad;
+this.cantidad = cantidad || 1;
 this.vender = function() {
     this.cantidad -= 1;
 }
+this.getInfo = function(){
+    return `${this.marca} ${this.modelo} (${this.anio}) - Color: ${this.color}`;
+};
+this.aumentarCantidad = function(){
+    this.cantidad +=1;
+};
+this.disminuirCantidad = function(){
+    if (this.cantidad > 1) {
+        this.cantidad -= 1;
+    }
+};
 this.comprar = function() {
 this.cantidad += 1;
 }
@@ -101,5 +112,24 @@ function eliminarCarro(index) {
 }
 
 form.addEventListener('submit', agregarCarro);
+listaCarros.push(new Carro('Toyota', 'Corolla', 2010, 'amarillo'))
+listaCarros.push(new Carro('Honda', 'Civic', 2016, 'rojo'))
+listaCarros.push(new Carro('Chevrolet', 'Cruze', 2000, 'gris'))
+
+function buscarCarro(marca){
+    busqueda = document.getElementById('searchInput').value
+    resultadoBuscado = listaCarros.filter(
+        carro => carro.marca == busqueda
+    );
+    listaCarros = resultadoBuscado;
+    renderCarList();
+}
+
+document.getElementById('searchButton').addEventListener
+'click', function(){
+    buscarCarro();
+}
+
+
 
 renderCarList();
