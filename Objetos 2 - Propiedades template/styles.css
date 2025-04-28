@@ -141,6 +141,9 @@ button:hover {
     padding: 15px;
     background-color: white;
     border-radius: 8px;
+    botton{
+        padding: 8px;
+    }
 }
 #searchInput{
     padding: 8px;

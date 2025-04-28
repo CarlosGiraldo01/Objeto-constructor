@@ -1,6 +1,8 @@
 
 function Carro(marca, modelo, anio, color, cantidad) {
-
+if (marca.lenght > 20 || marca == "") {
+    throw new Error
+}
 this.marca = marca;
 this.modelo = modelo;
 this.anio = anio;
@@ -30,15 +32,15 @@ let listaCarros = [];
 const form = document.getElementById('carForm');
 const carsContainer = document.getElementById('carsContainer');
 
-function renderCarList() {
+function renderCarList(lista) {
     carsContainer.innerHTML = '';
     
-    if (listaCarros.length === 0) {
+    if (lista.length === 0) {
         carsContainer.innerHTML = '<p class="no-cars">No hay carros en la lista</p>';
         return;
     }
     
-    listaCarros.forEach((carro, index) => {
+    lista.forEach((carro, index) => {
         const carCard = document.createElement('div');
         carCard.className = 'car-card';
         
@@ -71,20 +73,17 @@ function renderCarList() {
     document.querySelectorAll('.increase-btn').forEach(button => {
         button.addEventListener('click', function() {
             const index = parseInt(this.getAttribute('data-index'));
-            listaCarros[index].comprar();
-            renderCarList();
+            lista[index].disminuirCantidad();
+            renderCarList(listaCarros);
         });
     });
     document.querySelectorAll('.decrease-btn').forEach(button => {
         button.addEventListener('click', function() {
             const index = parseInt(this.getAttribute('data-index'));
-            listaCarros[index].vender();
-            renderCarList();
+            lista[index].vender();
+            renderCarList(listaCarros);
         });
-    });
-
-
-    
+    });    
 }
 
 function agregarCarro(event) {
@@ -100,7 +99,7 @@ function agregarCarro(event) {
     
     listaCarros.push(nuevoCarro);
 
-    renderCarList();
+    renderCarList(listaCarros);
     
     form.reset();
     document.getElementById('cantidad').value = 1;
@@ -108,7 +107,7 @@ function agregarCarro(event) {
 
 function eliminarCarro(index) {
     listaCarros.splice(index, 1);
-    renderCarList();
+    renderCarList(listaCarros);
 }
 
 form.addEventListener('submit', agregarCarro);
@@ -116,20 +115,33 @@ listaCarros.push(new Carro('Toyota', 'Corolla', 2010, 'amarillo'))
 listaCarros.push(new Carro('Honda', 'Civic', 2016, 'rojo'))
 listaCarros.push(new Carro('Chevrolet', 'Cruze', 2000, 'gris'))
 
-function buscarCarro(marca){
+function buscarCarro(){
     busqueda = document.getElementById('searchInput').value
-    resultadoBuscado = listaCarros.filter(
-        carro => carro.marca == busqueda
+
+    if (busqueda == '') {
+        renderCarList(listaCarros);
+        return;
+    };
+    resultadoBuscado = listaCarros.filter(carro => carro.marca == busqueda   
     );
-    listaCarros = resultadoBuscado;
-    renderCarList();
+    renderCarList(resultadoBuscado);
+}
+function ultimoDeLaLista(){
+    renderCarList(listaCarros.slice(-1));
 }
 
-document.getElementById('searchButton').addEventListener
+document.getElementById('searchButton').addEventListener(
 'click', function(){
     buscarCarro();
 }
+)
+document.getElementById('searchInput').addEventListener(
+    'keypress', function(event) {
+        if (event.key === 'Enter') {
+            buscarCarro();
+        }
+    }
+)
+console.log(listaCarros[0] instanceof Carro)
 
-
-
-renderCarList();
+renderCarList(listaCarros);
